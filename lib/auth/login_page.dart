@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:law_app/Home/home_page.dart';
 import 'package:law_app/auth/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,6 +11,67 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool loading = false;
+  bool _isPasswordVisible = false;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool validateAndSave() {
+    final form = _formKey.currentState;
+    if (form?.validate() ?? false) {
+      form?.save();
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> loginWithEmailPassword() async {
+    if (validateAndSave()) {
+      setState(() {
+        loading = true;
+      });
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+
+        // Navigate to next screen or show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login Successful!, Welcome')),
+        );
+
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = 'An error occurred. Please try again.';
+        if (e.code == 'user-not-found') {
+          errorMessage = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Wrong password provided for that user.';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'An unexpected error occurred. Please check credientials and try again.'),
+              backgroundColor: Colors.red),
+        );
+      } finally {
+        setState(() {
+          loading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             // text + image
             const SizedBox(
-              height: 50,
+              height: 40,
             ),
             Padding(
               padding: const EdgeInsets.all(12),
@@ -46,51 +109,100 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
 
-            const Padding(
-              padding: EdgeInsets.all(12),
-              child: TextField(
-                decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                  labelText: 'Email',
-                  labelStyle: TextStyle(color: Color(0xFF11CEC4)),
-                ),
-              ),
-            ),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF11CEC4))),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF11CEC4))),
+                        labelText: 'Email',
+                        labelStyle: TextStyle(color: Color(0xFF11CEC4)),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email field cannot be empty';
+                        }
+                        final emailRegex = RegExp(
+                            r'^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$');
+                        if (!emailRegex.hasMatch(value)) {
+                          return 'Invalid Email';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: !_isPasswordVisible,
+                      decoration: InputDecoration(
+                        enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF11CEC4))),
+                        focusedBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF11CEC4))),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: const Color(0xFF11CEC4),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
+                        labelText: 'Password',
+                        labelStyle: const TextStyle(color: Color(0xFF11CEC4)),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password field cannot be empty';
+                        }
+                        if (value.length < 8) {
+                          return 'Password length should be greater than 8 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
 
-            const Padding(
-              padding: EdgeInsets.all(12),
-              child: TextField(
-                decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                  labelText: 'Password',
-                  labelStyle: TextStyle(color: Color(0xFF11CEC4)),
-                ),
-              ),
-            ),
+                  // login button
 
-            // login button
+                  const SizedBox(
+                    height: 20,
+                  ),
 
-            const SizedBox(
-              height: 20,
-            ),
-
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF11CEC4),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 110, vertical: 15),
-                textStyle: const TextStyle(fontSize: 20),
-              ),
-              child: const Text(
-                'Login',
-                style: TextStyle(color: Colors.white),
+                  loading
+                      ? const CircularProgressIndicator(
+                          color: Color(0xFF11CEC4))
+                      : ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState?.validate() ?? false) {
+                              loginWithEmailPassword();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF11CEC4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 110, vertical: 15),
+                            textStyle: const TextStyle(fontSize: 20),
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                ],
               ),
             ),
 

@@ -55,7 +55,7 @@ class _SignupPageState extends State<SignupPage> {
 
         // Navigate to next screen or show success message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Signup Successful!')),
+          SnackBar(content: Text('Signup Successful!, Login to continue')),
         );
 
         Navigator.of(context).pop();
@@ -233,7 +233,7 @@ class _SignupPageState extends State<SignupPage> {
                             },
                           ),
                           labelText: 'Password',
-                          labelStyle: TextStyle(color: Color(0xFF11CEC4)),
+                          labelStyle: const TextStyle(color: Color(0xFF11CEC4)),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
