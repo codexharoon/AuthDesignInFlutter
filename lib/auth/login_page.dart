@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:law_app/Home/home_page.dart';
+import 'package:law_app/auth/authProviders/googleAuth.dart';
 import 'package:law_app/auth/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -274,16 +275,21 @@ class _LoginPageState extends State<LoginPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('assets/images/google.png',
-                          height: 50, width: 50),
-                      const SizedBox(
-                        width: 20,
+                      GestureDetector(
+                        onTap: () {
+                          signInWithGoogle(context);
+                        },
+                        child: Image.asset('assets/images/google.png',
+                            height: 50, width: 50),
                       ),
-                      Image.asset(
-                        'assets/images/linkedin.png',
-                        height: 50,
-                        width: 50,
-                      ),
+                      // const SizedBox(
+                      //   width: 20,
+                      // ),
+                      // Image.asset(
+                      //   'assets/images/linkedin.png',
+                      //   height: 50,
+                      //   width: 50,
+                      // ),
                     ],
                   ),
                 ),

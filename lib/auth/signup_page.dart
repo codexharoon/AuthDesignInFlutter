@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:law_app/auth/authProviders/googleAuth.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -335,16 +336,21 @@ class _SignupPageState extends State<SignupPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('assets/images/google.png',
-                          height: 50, width: 50),
-                      const SizedBox(
-                        width: 20,
+                      GestureDetector(
+                        onTap: () {
+                          signInWithGoogle(context);
+                        },
+                        child: Image.asset('assets/images/google.png',
+                            height: 50, width: 50),
                       ),
-                      Image.asset(
-                        'assets/images/linkedin.png',
-                        height: 50,
-                        width: 50,
-                      ),
+                      // const SizedBox(
+                      //   width: 20,
+                      // ),
+                      // Image.asset(
+                      //   'assets/images/linkedin.png',
+                      //   height: 50,
+                      //   width: 50,
+                      // ),
                     ],
                   ),
                 )
