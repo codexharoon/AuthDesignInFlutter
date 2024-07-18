@@ -35,18 +35,38 @@ class _LoginPageState extends State<LoginPage> {
         loading = true;
       });
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        final UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
 
-        // Navigate to next screen or show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login Successful!, Welcome')),
-        );
+        // Check if email is verified
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null && user.emailVerified) {
+          // Navigate to next screen or show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Login Successful! Welcome')),
+          );
 
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomePage()));
+        } else {
+          // Show message to verify email
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Please verify your email to log in.'),
+                backgroundColor: Colors.red),
+          );
+
+          // Optionally, resend verification email
+          try {
+            await user?.sendEmailVerification();
+          } catch (e) {
+            // Handle errors specifically from sendEmailVerification
+            // Optionally, log this error or show a specific message
+          }
+        }
       } on FirebaseAuthException catch (e) {
         String errorMessage = 'An error occurred. Please try again.';
         if (e.code == 'user-not-found') {
@@ -60,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
               content: Text(
                   'An unexpected error occurred. Please check credientials and try again.'),
               backgroundColor: Colors.red),

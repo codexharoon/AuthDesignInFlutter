@@ -52,14 +52,20 @@ class _SignupPageState extends State<SignupPage> {
             'name': _nameController.text,
             'phone': _phoneController.text,
           });
+
+          // Send email verification
+          await user.sendEmailVerification();
+
+          // Show success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+                    'Signup Successful! A verification email has been sent to ${user.email}. Please verify your email to continue.')),
+          );
+
+          // Navigate back to login screen
+          Navigator.of(context).pop();
         }
-
-        // Navigate to next screen or show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Signup Successful!, Login to continue')),
-        );
-
-        Navigator.of(context).pop();
       } on FirebaseAuthException catch (e) {
         String errorMessage = 'An error occurred. Please try again.';
         if (e.code == 'weak-password') {
