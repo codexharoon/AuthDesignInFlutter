@@ -135,7 +135,7 @@ class _SliderView extends StatelessWidget {
             // Menu(Icons.favorite, 'Likes'),
             Menu(Icons.person, 'Profile'),
             Menu(Icons.settings, 'Settings'),
-            Menu(Icons.arrow_back_ios, 'LogOut')
+            Menu(Icons.logout, 'LogOut')
           ]
               .map(
                 (menu) => _SliderMenuItem(
