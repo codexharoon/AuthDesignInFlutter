@@ -39,11 +39,18 @@ Future<void> signInWithGoogle(BuildContext context) async {
           const SnackBar(content: Text('Sign in successful')),
         );
 
-        Navigator.pushReplacement(
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => HomePage(),
+        //   ),
+        // );
+
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (Route<dynamic> route) =>
+              false, // This condition ensures all previous routes are removed
         );
       }
     } else {
