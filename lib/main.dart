@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:law_app/auth/auth_page.dart';
 import 'package:law_app/auth/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -13,6 +14,7 @@ void main() async {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'BalsamiqSans'),
       home: const LoginPage(),
+      // home: const AuthPage(),
     ),
   );
 }

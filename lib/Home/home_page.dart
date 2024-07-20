@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 
@@ -15,6 +16,11 @@ class HomePageState extends State<HomePage> {
 
   late Widget _selectedWidget;
   // HomePageState() : _selectedWidget = _AuthorList(); // Initialize with the widget
+
+  // sign user out method
+  void signUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
 
   @override
   void initState() {
@@ -68,6 +74,7 @@ class HomePageState extends State<HomePage> {
                 _selectedWidget = Center(
                   child: Text(title),
                 );
+                // signUserOut();
                 break;
             }
           },
@@ -82,7 +89,9 @@ class HomePageState extends State<HomePage> {
 class _SliderView extends StatelessWidget {
   final Function(String)? onItemClick;
 
-  const _SliderView({Key? key, this.onItemClick}) : super(key: key);
+  final user = FirebaseAuth.instance.currentUser!;
+
+  _SliderView({Key? key, this.onItemClick}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,17 +108,18 @@ class _SliderView extends StatelessWidget {
             backgroundColor: Colors.grey,
             child: CircleAvatar(
               radius: 60,
-              backgroundImage:
-                  Image.network('https://github.com/codexharoon.png').image,
+              backgroundImage: Image.network(
+                      user.photoURL ?? 'https://github.com/codexharoon.png')
+                  .image,
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          const Text(
-            'Haroon',
+          Text(
+            user.displayName ?? 'user',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 30,
