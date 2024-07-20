@@ -9,5 +9,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-      const MaterialApp(debugShowCheckedModeBanner: false, home: LoginPage()));
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(fontFamily: 'BalsamiqSans'),
+      home: const LoginPage(),
+    ),
+  );
 }
