@@ -5,6 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:law_app/Home/home_page.dart';
 
 Future<void> signInWithGoogle(BuildContext context) async {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(color: Color(0xFF11CEC4)),
+        );
+      });
   try {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
@@ -64,5 +71,6 @@ Future<void> signInWithGoogle(BuildContext context) async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error signing in: $e')),
     );
+    Navigator.pop(context);
   }
 }
