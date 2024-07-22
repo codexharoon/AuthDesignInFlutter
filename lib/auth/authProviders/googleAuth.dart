@@ -34,6 +34,9 @@ Future<void> signInWithGoogle(BuildContext context) async {
       final User? user = userCredential.user;
 
       if (user != null) {
+        // Dismiss the loading dialog if user cancelled the login
+        Navigator.pop(context);
+
         // Store user information in Firestore
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'name': user.displayName,
@@ -46,13 +49,6 @@ Future<void> signInWithGoogle(BuildContext context) async {
           const SnackBar(content: Text('Sign in successful')),
         );
 
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => HomePage(),
-        //   ),
-        // );
-
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
@@ -61,16 +57,18 @@ Future<void> signInWithGoogle(BuildContext context) async {
         );
       }
     } else {
+      // Dismiss the loading dialog if user cancelled the login
+      Navigator.pop(context);
       // User cancelled the login
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Sign in cancelled by user')),
       );
     }
   } catch (e) {
+    Navigator.pop(context);
     // Error handling
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error signing in: $e')),
     );
-    Navigator.pop(context);
   }
 }
