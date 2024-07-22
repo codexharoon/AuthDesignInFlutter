@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:law_app/Hire%20Services/form_page.dart';
 import 'package:law_app/Hire%20Services/sub_options_details.dart';
 import 'package:collection/collection.dart';
 
@@ -10,23 +11,30 @@ class HireServices extends StatefulWidget {
 }
 
 class _HireServicesState extends State<HireServices> {
-  String selectedCategory = "I.T";
+  String selectedCategory = "Consumer Contracts";
   String? selectedSubOption;
 
   final List<Category> categories = [
-    // Category(
-    //   backgroundColor: const Color.fromRGBO(159, 129, 247, 0.15),
-    //   labelColor: const Color.fromRGBO(159, 129, 247, 1.0),
-    //   icon: Icons.category,
-    //   title: 'All',
-    //   subOptions: ['General Law', 'All Cases'],
-    // ),
+    Category(
+      backgroundColor: const Color.fromRGBO(159, 129, 247, 0.15),
+      labelColor: const Color.fromRGBO(159, 129, 247, 1.0),
+      icon: Icons.category,
+      title: 'Consumer Contracts',
+      subOptions: [
+        'Travel',
+        'Hotel',
+        'Insurance',
+        'Telecommunication',
+        'Purchase Contracts',
+        'Appintment Cancellation',
+      ],
+    ),
     Category(
       backgroundColor: const Color.fromRGBO(25, 103, 210, 0.15),
       labelColor: const Color.fromRGBO(25, 103, 210, 1.0),
       icon: Icons.computer,
       title: 'I.T',
-      subOptions: ['Credit Card Claims', 'Software Disputes'],
+      subOptions: ['Immigration', 'Traffic issues'],
     ),
     Category(
       backgroundColor: const Color.fromRGBO(255, 0, 0, 0.15),
@@ -62,7 +70,7 @@ class _HireServicesState extends State<HireServices> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Text(
-            'Popular Categories',
+            'Select Category',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -72,7 +80,7 @@ class _HireServicesState extends State<HireServices> {
         ),
         const SizedBox(height: 15),
         SizedBox(
-          height: 100, // Adjust height as needed
+          height: 150, // Adjust height as needed
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categories.length,
@@ -88,7 +96,7 @@ class _HireServicesState extends State<HireServices> {
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
-                  width: 100,
+                  width: 150,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: cat.backgroundColor,
@@ -128,9 +136,10 @@ class _HireServicesState extends State<HireServices> {
               top: 25,
               left: 16,
               right: 16,
+              bottom: 2,
             ),
             child: Text(
-              'Sub Options For ${category.title}',
+              'Select Sub-Option',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -155,6 +164,15 @@ class _HireServicesState extends State<HireServices> {
                           builder: (context) => SubOptionDetail(
                             categoryTitle: category.title,
                             subOptionTitle: subOption,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      FormPage(title: subOption),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );

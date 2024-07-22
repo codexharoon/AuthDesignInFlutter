@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class SubOptionDetail extends StatelessWidget {
   final String categoryTitle;
   final String subOptionTitle;
+  final void Function()? onPressed;
 
   const SubOptionDetail({
     super.key,
     required this.categoryTitle,
     required this.subOptionTitle,
+    required this.onPressed,
   });
 
   @override
@@ -18,7 +20,7 @@ class SubOptionDetail extends StatelessWidget {
           Stack(
             children: [
               Image.asset(
-                "assets/jobdetail.png",
+                "assets/images/detail.png",
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
@@ -108,13 +110,13 @@ class SubOptionDetail extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: onPressed,
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                   ),
                   backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 201, 185, 250),
+                    const Color.fromARGB(255, 159, 129, 247),
                   ),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
