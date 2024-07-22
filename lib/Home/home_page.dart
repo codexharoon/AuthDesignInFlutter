@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:law_app/Hire%20Services/hire_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,10 +25,8 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    title = "Home";
-    _selectedWidget = Center(
-      child: Text(title),
-    );
+    title = "Hire Services";
+    _selectedWidget = const HireServices();
     super.initState();
   }
 
@@ -55,7 +54,15 @@ class HomePageState extends State<HomePage> {
             });
 
             switch (title) {
-              case 'Home':
+              case 'Hire Services':
+                _selectedWidget = const HireServices();
+                break;
+              case 'Hire Quickly':
+                _selectedWidget = Center(
+                  child: Text(title),
+                );
+                break;
+              case 'ChatBot':
                 _selectedWidget = Center(
                   child: Text(title),
                 );
@@ -129,7 +136,10 @@ class _SliderView extends StatelessWidget {
             height: 20,
           ),
           ...[
-            Menu(Icons.home, 'Home'),
+            Menu(Icons.work, 'Hire Services'),
+            Menu(Icons.flash_on, 'Hire Quickly'),
+            // Menu(Icons.chat_bubble, 'Chatbot'),
+            Menu(Icons.forum, 'ChatBot'),
             // Menu(Icons.add_circle, 'Add Post'),
             // Menu(Icons.notifications_active, 'Notification'),
             // Menu(Icons.favorite, 'Likes'),
