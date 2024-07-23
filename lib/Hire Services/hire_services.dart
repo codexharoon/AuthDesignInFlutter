@@ -3,7 +3,6 @@ import 'package:law_app/Hire%20Services/form_page.dart';
 import 'package:law_app/Hire%20Services/sub_options_details.dart';
 import 'package:collection/collection.dart';
 import 'package:accordion/accordion.dart';
-import 'package:accordion/controllers.dart';
 import 'package:custom_accordion/custom_accordion.dart';
 
 class HireServices extends StatefulWidget {

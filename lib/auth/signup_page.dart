@@ -80,7 +80,7 @@ class _SignupPageState extends State<SignupPage> {
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
               content: Text('An unexpected error occurred. Please try again.'),
               backgroundColor: Colors.red),
         );

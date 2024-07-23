@@ -23,6 +23,32 @@ class HomePageState extends State<HomePage> {
     FirebaseAuth.instance.signOut();
   }
 
+  void logoutDialog(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Logout"),
+            content: const Text("Are you sure you want to logout?"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  signUserOut();
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Logout"),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   void initState() {
     title = "Hire Services";
@@ -78,10 +104,7 @@ class HomePageState extends State<HomePage> {
                 );
                 break;
               case 'LogOut':
-                _selectedWidget = Center(
-                  child: Text(title),
-                );
-                // signUserOut();
+                logoutDialog(context);
                 break;
             }
           },
