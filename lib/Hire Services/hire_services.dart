@@ -145,7 +145,7 @@ class _HireServicesState extends State<HireServices> {
     Category(
       backgroundColor: const Color.fromRGBO(255, 0, 0, 0.15),
       labelColor: const Color.fromRGBO(255, 0, 0, 1.0),
-      icon: Icons.business,
+      icon: Icons.record_voice_over,
       title: 'Testimony',
       subOptions: [
         Option(
@@ -158,13 +158,60 @@ class _HireServicesState extends State<HireServices> {
         ),
       ],
     ),
-    // Category(
-    //   backgroundColor: const Color.fromRGBO(249, 171, 0, 0.15),
-    //   labelColor: const Color.fromRGBO(249, 171, 0, 1.0),
-    //   icon: Icons.local_hospital,
-    //   title: 'Healthcare',
-    //   subOptions: ['Medical Malpractice', 'Healthcare Regulations'],
-    // ),
+    Category(
+      backgroundColor: const Color.fromRGBO(159, 129, 247, 0.15),
+      labelColor: const Color.fromRGBO(159, 129, 247, 1.0),
+      icon: Icons.business,
+      title: 'Contract archiving',
+      subOptions: [
+        Option(
+          title: 'Entry',
+          subOptions: [
+            AnotherOption(title: 'Storage', subOptions: [
+              'Data input',
+            ]),
+          ],
+        ),
+      ],
+    ),
+    Category(
+      backgroundColor: const Color.fromRGBO(249, 171, 0, 0.15),
+      labelColor: const Color.fromRGBO(249, 171, 0, 1.0),
+      icon: Icons.credit_card,
+      title: 'Credit Card',
+      subOptions: [
+        Option(
+          title: 'Trends',
+          subOptions: [
+            AnotherOption(title: 'Trends', subOptions: [
+              'Imolementation',
+              'Imolementation',
+              'Imolementation',
+              'Imolementation',
+            ]),
+          ],
+        ),
+      ],
+    ),
+    Category(
+      backgroundColor: const Color.fromRGBO(25, 103, 210, 0.15),
+      labelColor: const Color.fromRGBO(25, 103, 210, 1.0),
+      icon: Icons.verified_user,
+      title: 'Waranties Claims',
+      subOptions: [
+        Option(
+          title: 'Entry',
+          subOptions: [
+            AnotherOption(title: 'Storage', subOptions: [
+              'Matter 1',
+              'Matter 2',
+              'Matter 3',
+              'Matter 4',
+            ]),
+          ],
+        ),
+      ],
+    ),
     // Category(
     //   backgroundColor: const Color.fromRGBO(52, 168, 83, 0.15),
     //   labelColor: const Color.fromRGBO(52, 168, 83, 1.0),
@@ -191,6 +238,23 @@ class _HireServicesState extends State<HireServices> {
               fontWeight: FontWeight.bold,
               color: const Color.fromARGB(255, 159, 129, 247).withOpacity(1),
             ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(right: 8, top: 5),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                'swipe to see more ',
+                style: TextStyle(color: Colors.grey),
+              ),
+              Icon(
+                Icons.arrow_forward,
+                size: 17,
+                color: Colors.grey,
+              )
+            ],
           ),
         ),
         const SizedBox(height: 15),

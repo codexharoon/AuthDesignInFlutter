@@ -88,17 +88,22 @@ class HomePageState extends State<HomePage> {
                   child: Text(title),
                 );
                 break;
+              case 'Orders':
+                _selectedWidget = Center(
+                  child: Text(title),
+                );
+                break;
               case 'ChatBot':
                 _selectedWidget = Center(
                   child: Text(title),
                 );
                 break;
-              case 'Profile':
+              case 'Text Editor':
                 _selectedWidget = Center(
                   child: Text(title),
                 );
                 break;
-              case 'Settings':
+              case 'Profile':
                 _selectedWidget = Center(
                   child: Text(title),
                 );
@@ -161,13 +166,15 @@ class _SliderView extends StatelessWidget {
           ...[
             Menu(Icons.work, 'Hire Services'),
             Menu(Icons.flash_on, 'Hire Quickly'),
+            Menu(Icons.receipt, 'Orders'),
             // Menu(Icons.chat_bubble, 'Chatbot'),
             Menu(Icons.forum, 'ChatBot'),
+            Menu(Icons.edit, 'Text Editor'),
             // Menu(Icons.add_circle, 'Add Post'),
             // Menu(Icons.notifications_active, 'Notification'),
             // Menu(Icons.favorite, 'Likes'),
             Menu(Icons.person, 'Profile'),
-            Menu(Icons.settings, 'Settings'),
+            // Menu(Icons.settings, 'Settings'),
             Menu(Icons.logout, 'LogOut')
           ]
               .map(

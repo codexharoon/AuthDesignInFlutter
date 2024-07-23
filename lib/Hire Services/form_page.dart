@@ -84,10 +84,10 @@ class _FormPageState extends State<FormPage> {
             message: _messageController.text,
             services: widget.selectedCategorySubOptionName);
 
-        // // Clear the form
-        // _whatsappController.clear();
-        // _emailController.clear();
-        // _messageController.clear();
+        // Clear the form
+        _whatsappController.clear();
+        _emailController.clear();
+        _messageController.clear();
 
         // // Navigate to the home page
         // Navigator.of(context).pop();
