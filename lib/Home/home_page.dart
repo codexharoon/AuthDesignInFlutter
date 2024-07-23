@@ -60,12 +60,12 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SliderDrawer(
-        appBar: SliderAppBar(
+        appBar: const SliderAppBar(
           appBarColor: Colors.white,
           title: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 22,
+            '',
+            style: TextStyle(
+              // fontSize: 22,
               fontWeight: FontWeight.w700,
             ),
           ),
