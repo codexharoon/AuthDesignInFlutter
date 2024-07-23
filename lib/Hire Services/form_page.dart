@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:law_app/components/Email/send_email_emailjs.dart';
 
 class FormPage extends StatefulWidget {
   final String selectedCategory;
@@ -66,6 +67,30 @@ class _FormPageState extends State<FormPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Submitted successfully!')),
         );
+
+        // combine services and sub services
+        String services = widget.selectedCategory +
+            ' - ' +
+            widget.selectedCategoryOption +
+            ' - ' +
+            widget.selectedCategorySubOptionName;
+
+        // send email
+
+        sendEmailUsingEmailjs(
+            name: currentUser?.displayName ?? 'user',
+            email: _emailController.text,
+            subject: services,
+            message: _messageController.text,
+            services: widget.selectedCategorySubOptionName);
+
+        // // Clear the form
+        // _whatsappController.clear();
+        // _emailController.clear();
+        // _messageController.clear();
+
+        // // Navigate to the home page
+        // Navigator.of(context).pop();
       } catch (e) {
         // Handle errors, e.g., show an error message
         ScaffoldMessenger.of(context).showSnackBar(

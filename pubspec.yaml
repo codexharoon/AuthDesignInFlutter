@@ -42,6 +42,8 @@ dependencies:
   flutter_slider_drawer: ^2.1.3
   accordion: ^2.6.0
   custom_accordion: ^1.0.0
+  http: ^1.2.0
+  emailjs: ^4.0.0
 
 dev_dependencies:
   flutter_test:
