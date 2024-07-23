@@ -287,6 +287,8 @@ class _HireServicesState extends State<HireServices> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         MyNestedAccordion(
+                          selectedCategory: selectedCategory,
+                          selectedCategoryOption: subOption.title,
                           subOptions: subOption.subOptions,
                         ),
                       ],
@@ -340,8 +342,14 @@ class AnotherOption {
 
 class MyNestedAccordion extends StatelessWidget //__
 {
+  final String selectedCategory;
+  final String selectedCategoryOption;
   final List<AnotherOption> subOptions;
-  const MyNestedAccordion({super.key, required this.subOptions});
+  const MyNestedAccordion(
+      {super.key,
+      required this.selectedCategory,
+      required this.selectedCategoryOption,
+      required this.subOptions});
 
   @override
   Widget build(context) //__
@@ -386,8 +394,14 @@ class MyNestedAccordion extends StatelessWidget //__
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          FormPage(title: opt),
+                                      builder: (context) => FormPage(
+                                        selectedCategory: selectedCategory,
+                                        selectedCategoryOption:
+                                            selectedCategoryOption,
+                                        selectedCategorySubOption:
+                                            sbOption.title,
+                                        selectedCategorySubOptionName: opt,
+                                      ),
                                     ),
                                   );
                                 },
