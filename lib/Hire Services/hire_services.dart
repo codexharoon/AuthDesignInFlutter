@@ -265,6 +265,7 @@ class _HireServicesState extends State<HireServices> {
             itemCount: categories.length,
             itemBuilder: (context, index) {
               final cat = categories[index];
+              bool isSelected = selectedCategory == cat.title;
               return GestureDetector(
                 onTap: () {
                   setState(() {
@@ -275,10 +276,12 @@ class _HireServicesState extends State<HireServices> {
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
-                  width: 150,
+                  width: isSelected ? 200 : 150,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: cat.backgroundColor,
+                    color: isSelected
+                        ? cat.backgroundColor.withOpacity(0.3)
+                        : cat.backgroundColor,
                     border: Border.all(
                       color: selectedCategory == cat.title
                           ? cat.labelColor

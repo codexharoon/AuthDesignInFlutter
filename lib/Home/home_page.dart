@@ -18,6 +18,8 @@ class HomePageState extends State<HomePage> {
   late Widget _selectedWidget;
   // HomePageState() : _selectedWidget = _AuthorList(); // Initialize with the widget
 
+  String selectedMenuItem = '';
+
   // sign user out method
   void signUserOut() {
     FirebaseAuth.instance.signOut();
