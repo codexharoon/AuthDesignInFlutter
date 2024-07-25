@@ -104,7 +104,7 @@ class _FormPageState extends State<FormPage> {
         'selectedCategorySubOptionName': widget.selectedCategorySubOptionName,
         'userId': currentUser?.uid,
         'status': 'in progress',
-        'fileUrl': fileUrl,
+        'fileUrl': fileUrl ?? '',
         'timestamp':
             FieldValue.serverTimestamp(), // Adds a server-side timestamp
       };

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:law_app/Hire%20Quickly/hire_quickly.dart';
 import 'package:law_app/Hire%20Services/hire_services.dart';
+import 'package:law_app/Orders/user_orders_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -90,9 +91,7 @@ class HomePageState extends State<HomePage> {
                 _selectedWidget = const HireQuicklyPage();
                 break;
               case 'Orders':
-                _selectedWidget = Center(
-                  child: Text(title),
-                );
+                _selectedWidget = const OrderPage();
                 break;
               case 'ChatBot':
                 _selectedWidget = Center(
