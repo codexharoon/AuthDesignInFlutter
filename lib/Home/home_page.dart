@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:law_app/Hire%20Quickly/hire_quickly.dart';
 import 'package:law_app/Hire%20Services/hire_services.dart';
 
 class HomePage extends StatefulWidget {
@@ -86,9 +87,7 @@ class HomePageState extends State<HomePage> {
                 _selectedWidget = const HireServices();
                 break;
               case 'Hire Quickly':
-                _selectedWidget = Center(
-                  child: Text(title),
-                );
+                _selectedWidget = const HireQuicklyPage();
                 break;
               case 'Orders':
                 _selectedWidget = Center(

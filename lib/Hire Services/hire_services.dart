@@ -124,7 +124,7 @@ class _HireServicesState extends State<HireServices> {
           title: 'Immigration',
           subOptions: [
             AnotherOption(title: 'Residence Foreigners', subOptions: [
-              'Matter 1',
+              'Inadequate compensation',
               'Matter 2',
               'Matter 3',
               'Matter 4',
@@ -274,20 +274,22 @@ class _HireServicesState extends State<HireServices> {
                         null; // Reset selected sub-option when changing category
                   });
                 },
-                child: Transform.scale(
-                  scale: isSelected ? 1.1 : 1,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    width: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: cat.backgroundColor,
-                      border: Border.all(
-                        color: selectedCategory == cat.title
-                            ? cat.labelColor
-                            : Colors.transparent,
-                      ),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  width: selectedCategory == cat.title ? 150 : 152,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: cat.backgroundColor,
+                    border: Border.all(
+                      width: 2,
+                      color: selectedCategory == cat.title
+                          ? cat.labelColor
+                          : Colors.transparent,
                     ),
+                  ),
+                  child: Transform.scale(
+                    scale: isSelected ? 1.1 : 1,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
