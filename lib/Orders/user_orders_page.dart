@@ -19,6 +19,14 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          'Orders',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: FutureBuilder<QuerySnapshot>(
         future: orders.where('userId', isEqualTo: uid).get(),
         builder: (context, snapshot) {
