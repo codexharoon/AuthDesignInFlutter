@@ -12,7 +12,8 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<SliderDrawerState> _sliderDrawerKey =
       GlobalKey<SliderDrawerState>();
   late String title;
@@ -20,11 +21,13 @@ class HomePageState extends State<HomePage> {
   late Widget _selectedWidget;
   // HomePageState() : _selectedWidget = _AuthorList(); // Initialize with the widget
 
+  late AnimationController _controller;
+
   String selectedMenuItem = '';
 
   // sign user out method
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
+  void signUserOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 
   void logoutDialog(context) {
@@ -55,9 +58,23 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    super.initState();
     title = "Hire Services";
     _selectedWidget = const HireServices();
-    super.initState();
+    selectedMenuItem = title;
+
+    // Initialize the AnimationController
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    // Dispose of the AnimationController to avoid the error
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -127,7 +144,7 @@ class _SliderView extends StatelessWidget {
   final Function(String)? onItemClick;
   final String selectedMenuItem;
 
-  final user = FirebaseAuth.instance.currentUser!;
+  final User? user = FirebaseAuth.instance.currentUser!;
 
   _SliderView({Key? key, this.onItemClick, required this.selectedMenuItem})
       : super(key: key);
@@ -148,7 +165,7 @@ class _SliderView extends StatelessWidget {
             child: CircleAvatar(
               radius: 60,
               backgroundImage: Image.network(
-                      user.photoURL ?? 'https://github.com/codexharoon.png')
+                      user?.photoURL ?? 'https://github.com/codexharoon.png')
                   .image,
             ),
           ),
@@ -156,7 +173,7 @@ class _SliderView extends StatelessWidget {
             height: 20,
           ),
           Text(
-            user.displayName ?? 'user',
+            user?.displayName ?? 'user',
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.black,
