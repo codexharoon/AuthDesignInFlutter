@@ -125,50 +125,105 @@ class _HireServicesState extends State<HireServices> {
           subOptions: [
             AnotherOption(title: 'Residence Foreigners', subOptions: [
               'Inadequate compensation',
-              'Matter 2',
-              'Matter 3',
-              'Matter 4',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              // 'Matter 4',
             ]),
             AnotherOption(
               title: 'Nationality',
               subOptions: [
-                'Implementation',
-                'Implementation',
+                // 'Implementation',
+                'Customer service',
+                'Cancelled',
+                'Baggage Handling',
+              ],
+            ),
+            AnotherOption(
+              title: 'Marriage issues',
+              subOptions: [
+                'Cancelled',
+                'Booking and reservation issues',
                 // 'Cancelled',
                 // 'Baggage Handling',
               ],
             ),
           ],
         ),
-      ],
-    ),
-    Category(
-      backgroundColor: const Color.fromRGBO(255, 0, 0, 0.15),
-      labelColor: const Color.fromRGBO(255, 0, 0, 1.0),
-      icon: Icons.record_voice_over,
-      title: 'Testimony',
-      subOptions: [
         Option(
-          title: 'Entry',
+          title: 'Traffic issues',
           subOptions: [
-            AnotherOption(title: 'Storage', subOptions: [
-              'Data input',
+            AnotherOption(title: 'Parking tickets', subOptions: [
+              'Inadequate compensation',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              // 'Matter 4',
             ]),
+            AnotherOption(
+              title: 'Traffic violations penalties',
+              subOptions: [
+                // 'Implementation',
+                'Billing errors',
+                'Security concerns',
+                'Disturbances',
+              ],
+            ),
           ],
         ),
       ],
     ),
+    // Category(
+    //   backgroundColor: const Color.fromRGBO(255, 0, 0, 0.15),
+    //   labelColor: const Color.fromRGBO(255, 0, 0, 1.0),
+    //   // backgroundColor: const Color.fromRGBO(159, 129, 247, 0.15),
+    //   // labelColor: const Color.fromRGBO(159, 129, 247, 1.0),
+    //   icon: Icons.record_voice_over,
+    //   title: 'Testimony',
+    //   subOptions: [
+    //     Option(
+    //       title: 'Entry',
+    //       subOptions: [
+    //         AnotherOption(title: 'Storage', subOptions: [
+    //           'Data input',
+    //         ]),
+    //       ],
+    //     ),
+    //   ],
+    // ),
     Category(
-      backgroundColor: const Color.fromRGBO(159, 129, 247, 0.15),
-      labelColor: const Color.fromRGBO(159, 129, 247, 1.0),
+      backgroundColor: const Color.fromRGBO(255, 0, 0, 0.15),
+      labelColor: const Color.fromRGBO(255, 0, 0, 1.0),
       icon: Icons.business,
       title: 'Contract archiving',
       subOptions: [
         Option(
-          title: 'Entry',
+          title: 'Data Archiving',
           subOptions: [
-            AnotherOption(title: 'Storage', subOptions: [
-              'Data input',
+            AnotherOption(title: 'Deadlines', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+            AnotherOption(title: 'Copy export', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+            AnotherOption(title: 'Alerts', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
             ]),
           ],
         ),
@@ -181,13 +236,118 @@ class _HireServicesState extends State<HireServices> {
       title: 'Credit Card',
       subOptions: [
         Option(
-          title: 'Trends',
+          title: 'Debits',
           subOptions: [
-            AnotherOption(title: 'Trends', subOptions: [
-              'Imolementation',
-              'Imolementation',
-              'Imolementation',
-              'Imolementation',
+            AnotherOption(title: 'Contract copy', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Overcharging', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Abusive debits', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Irregular flow rates', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+          ],
+        ),
+        Option(
+          title: 'Contract revocation',
+          subOptions: [
+            AnotherOption(title: 'Contract copy', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Overcharging', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Abusive debits', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Irregular flow rates', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+          ],
+        ),
+        Option(
+          title: 'Contract cancellation',
+          subOptions: [
+            AnotherOption(title: 'Contract copy', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Overcharging', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Abusive debits', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Irregular flow rates', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+          ],
+        ),
+        Option(
+          title: 'Contract resolution',
+          subOptions: [
+            AnotherOption(title: 'Contract copy', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Overcharging', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Abusive debits', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
+            ]),
+            AnotherOption(title: 'Irregular flow rates', subOptions: [
+              'Cancellation',
+              'Billing errors',
+              'Security concerns',
+              'Hidden fees and charges',
             ]),
           ],
         ),
@@ -200,13 +360,92 @@ class _HireServicesState extends State<HireServices> {
       title: 'Waranties Claims',
       subOptions: [
         Option(
-          title: 'Entry',
+          title: 'Data Archiving',
           subOptions: [
-            AnotherOption(title: 'Storage', subOptions: [
-              'Matter 1',
-              'Matter 2',
-              'Matter 3',
-              'Matter 4',
+            AnotherOption(title: 'Contract copy', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+            AnotherOption(title: 'Deadlines', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+            AnotherOption(title: 'Copy export', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+            AnotherOption(title: 'Alerts', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+          ],
+        ),
+      ],
+    ),
+    Category(
+      backgroundColor: const Color.fromRGBO(159, 129, 247, 0.15),
+      labelColor: const Color.fromRGBO(159, 129, 247, 1.0),
+      icon: Icons.record_voice_over,
+      title: 'Partner lawyers',
+      subOptions: [
+        Option(
+          title: 'Specialties',
+          subOptions: [
+            AnotherOption(title: 'Contract copy', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+            AnotherOption(title: 'Deadlines', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+            AnotherOption(title: 'Copy export', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
+            ]),
+            AnotherOption(title: 'Alerts', subOptions: [
+              'Cancelled',
+              'Delay',
+              'Baggage Handling',
+              'OverBooking Complaints',
+              'Hidden fees and charges',
+              'Booking and reservation issues',
+              'Inadequate compensation',
             ]),
           ],
         ),
