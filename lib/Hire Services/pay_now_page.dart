@@ -3,10 +3,19 @@ import 'color_extension.dart';
 // import 'invoice_page.dart';
 
 class PayNowPage extends StatefulWidget {
+  final String heading;
+  final String title;
+  final String subTitle;
+  final String option;
   final double totalPrice;
-  final String services;
 
-  const PayNowPage({Key? key, required this.totalPrice, required this.services})
+  const PayNowPage(
+      {Key? key,
+      required this.totalPrice,
+      required this.heading,
+      required this.title,
+      required this.subTitle,
+      required this.option})
       : super(key: key);
 
   @override
@@ -88,16 +97,44 @@ class _PayNowPageState extends State<PayNowPage> {
                     const SizedBox(height: 8),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'xyz service',
+                          widget.heading,
                           style: TextStyle(
                             color: TColor.primaryText,
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.title,
+                          style: TextStyle(
+                            color: TColor.primaryText,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.subTitle,
+                          style: TextStyle(
+                            color: TColor.primaryText,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.option,
+                          style: TextStyle(
+                            color: TColor.primaryText,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
                       ],
                     ),
                   ],
@@ -223,7 +260,7 @@ class _PayNowPageState extends State<PayNowPage> {
                           ),
                         ),
                         Text(
-                          "\$${widget.totalPrice.toStringAsFixed(2)}",
+                          "${widget.totalPrice.toStringAsFixed(2)} \$",
                           style: TextStyle(
                             color: TColor.primaryText,
                             fontSize: 13,
@@ -246,7 +283,7 @@ class _PayNowPageState extends State<PayNowPage> {
                           ),
                         ),
                         Text(
-                          "\$2",
+                          "$fee \$",
                           style: TextStyle(
                             color: TColor.primaryText,
                             fontSize: 13,
@@ -269,7 +306,7 @@ class _PayNowPageState extends State<PayNowPage> {
                           ),
                         ),
                         Text(
-                          "-\$4",
+                          "-$discount \$",
                           style: TextStyle(
                             color: TColor.primaryText,
                             fontSize: 13,
@@ -297,7 +334,7 @@ class _PayNowPageState extends State<PayNowPage> {
                           ),
                         ),
                         Text(
-                          "\$${total.toStringAsFixed(2)}",
+                          "${total.toStringAsFixed(2)} \$",
                           style: TextStyle(
                             color: TColor.primaryText,
                             fontSize: 15,

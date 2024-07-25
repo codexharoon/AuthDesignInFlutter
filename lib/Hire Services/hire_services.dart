@@ -457,24 +457,12 @@ class MyNestedAccordion extends StatelessWidget //__
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SubOptionDetail(
-                                categoryTitle: sbOption.title,
-                                subOptionTitle: opt,
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => FormPage(
-                                        selectedCategory: selectedCategory,
-                                        selectedCategoryOption:
-                                            selectedCategoryOption,
-                                        selectedCategorySubOption:
-                                            sbOption.title,
-                                        selectedCategorySubOptionName: opt,
-                                      ),
-                                    ),
-                                  );
-                                },
+                              builder: (context) => FormPage(
+                                selectedCategory: selectedCategory,
+                                selectedCategoryOption: selectedCategoryOption,
+                                selectedCategorySubOption: sbOption.title,
+                                selectedCategorySubOptionName: opt,
+                                price: 50,
                               ),
                             ),
                           );

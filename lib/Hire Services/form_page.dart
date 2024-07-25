@@ -10,6 +10,7 @@ class FormPage extends StatefulWidget {
   final String selectedCategoryOption;
   final String selectedCategorySubOption;
   final String selectedCategorySubOptionName;
+  final double price;
 
   const FormPage({
     Key? key,
@@ -17,6 +18,7 @@ class FormPage extends StatefulWidget {
     required this.selectedCategoryOption,
     required this.selectedCategorySubOption,
     required this.selectedCategorySubOptionName,
+    required this.price,
   }) : super(key: key);
 
   @override
@@ -63,6 +65,7 @@ class _FormPageState extends State<FormPage> {
         'selectedCategorySubOption': widget.selectedCategorySubOption,
         'selectedCategorySubOptionName': widget.selectedCategorySubOptionName,
         'userId': currentUser?.uid,
+        'status': 'in progress',
         'timestamp':
             FieldValue.serverTimestamp(), // Adds a server-side timestamp
       };
@@ -99,8 +102,11 @@ class _FormPageState extends State<FormPage> {
           context,
           MaterialPageRoute(
             builder: (context) => PayNowPage(
-              totalPrice: 100,
-              services: widget.selectedCategorySubOptionName,
+              heading: widget.selectedCategory,
+              title: widget.selectedCategoryOption,
+              subTitle: widget.selectedCategorySubOption,
+              option: widget.selectedCategorySubOptionName,
+              totalPrice: widget.price,
             ),
           ),
         );

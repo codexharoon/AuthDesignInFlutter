@@ -13,7 +13,7 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
   int _current = 0;
   dynamic _selectedIndex = {};
 
-  CarouselController _carouselController = new CarouselController();
+  final CarouselController _carouselController = CarouselController();
 
   final List _products = [
     {
@@ -21,7 +21,7 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
       'title': 'Travel',
       'subTitle': 'Air Plane',
       'option': 'Delay',
-      'price': '100 \$',
+      'price': '100',
       'description':
           'Compensation for flight delays, including reimbursement for expenses incurred due to the delay.',
       'color': const Color.fromRGBO(0, 204, 204, 1.0),
@@ -31,7 +31,7 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
       'title': 'Hotel',
       'subTitle': 'Reservation',
       'option': 'Cancelled',
-      'price': '200 \$',
+      'price': '200',
       'description':
           'Coverage for hotel reservation cancellations, including refunds and compensation for inconvenience.',
       'color': const Color.fromRGBO(159, 129, 247, 1.0),
@@ -41,7 +41,7 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
       'title': 'Immigration',
       'subTitle': 'Residence Foreigners',
       'option': 'Inadequate compensation',
-      'price': '300 \$',
+      'price': '300',
       'description':
           'Legal assistance for inadequate compensation claims related to residence permits for foreigners.',
       'color': const Color.fromRGBO(249, 171, 0, 1.0),
@@ -56,15 +56,17 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
               backgroundColor: _selectedIndex['color'],
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FormPage(
-                            selectedCategory: _selectedIndex['heading'],
-                            selectedCategoryOption: _selectedIndex['title'],
-                            selectedCategorySubOption:
-                                _selectedIndex['subTitle'],
-                            selectedCategorySubOptionName:
-                                _selectedIndex['option'])));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FormPage(
+                      selectedCategory: _selectedIndex['heading'],
+                      selectedCategoryOption: _selectedIndex['title'],
+                      selectedCategorySubOption: _selectedIndex['subTitle'],
+                      selectedCategorySubOptionName: _selectedIndex['option'],
+                      price: double.parse(_selectedIndex['price']),
+                    ),
+                  ),
+                );
               },
               child: const Icon(
                 Icons.arrow_forward_ios,
@@ -173,7 +175,7 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
                                     height: 40,
                                   ),
                                   Text(
-                                    item['price'],
+                                    '${item['price']} \$',
                                     style: const TextStyle(
                                       fontSize: 50,
                                       fontWeight: FontWeight.bold,
