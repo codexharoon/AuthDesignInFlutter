@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:law_app/Hire%20Services/pay_now_page.dart';
 import 'package:law_app/components/Email/send_email_emailjs.dart';
@@ -28,10 +32,6 @@ class FormPage extends StatefulWidget {
 class _FormPageState extends State<FormPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // final TextEditingController controller = TextEditingController();
-  String initialCountry = 'PK';
-  PhoneNumber number = PhoneNumber(isoCode: 'PK');
-
   final _nameController = TextEditingController();
   final _whatsappController = TextEditingController();
   final _emailController = TextEditingController();
@@ -40,6 +40,44 @@ class _FormPageState extends State<FormPage> {
   final currentUser = FirebaseAuth.instance.currentUser;
 
   bool loading = false;
+
+  PlatformFile? pickedFile;
+  UploadTask? uploadTask;
+  String? fileUrl;
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles();
+
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+    });
+  }
+
+  Future uploadFile() async {
+    if (pickedFile == null) return;
+
+    final path = 'files/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+
+    setState(() {
+      uploadTask = ref.putFile(file);
+    });
+
+    final snapshot = await uploadTask!.whenComplete(() {});
+
+    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    print('Download Link: $urlDownload');
+
+    setState(() {
+      fileUrl = urlDownload;
+      uploadTask = null;
+    });
+  }
 
   @override
   void initState() {
@@ -66,6 +104,7 @@ class _FormPageState extends State<FormPage> {
         'selectedCategorySubOptionName': widget.selectedCategorySubOptionName,
         'userId': currentUser?.uid,
         'status': 'in progress',
+        'fileUrl': fileUrl,
         'timestamp':
             FieldValue.serverTimestamp(), // Adds a server-side timestamp
       };
@@ -121,21 +160,6 @@ class _FormPageState extends State<FormPage> {
         });
       }
     }
-  }
-
-  void getPhoneNumber(String phoneNumber) async {
-    PhoneNumber number =
-        await PhoneNumber.getRegionInfoFromPhoneNumber(phoneNumber, 'PK');
-
-    setState(() {
-      this.number = number;
-    });
-  }
-
-  @override
-  void dispose() {
-    _whatsappController.dispose();
-    super.dispose();
   }
 
   @override
@@ -222,40 +246,6 @@ class _FormPageState extends State<FormPage> {
                         return null;
                       },
                     ),
-                    // InternationalPhoneNumberInput(
-                    //   onInputChanged: (PhoneNumber number) {
-                    //     print('Phone number changed: ${number.phoneNumber}');
-                    //   },
-                    //   onInputValidated: (bool value) {
-                    //     print('input validate: $value');
-                    //   },
-                    //   selectorConfig: const SelectorConfig(
-                    //     selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                    //     useBottomSheetSafeArea: true,
-                    //   ),
-                    //   ignoreBlank: false,
-                    //   // autoValidateMode: AutovalidateMode.disabled,
-                    //   selectorTextStyle:
-                    //       const TextStyle(color: Color(0xFF11CEC4)),
-                    //   initialValue: number,
-                    //   textFieldController: _whatsappController,
-                    //   formatInput: true,
-                    //   keyboardType: const TextInputType.numberWithOptions(
-                    //       signed: true, decimal: true),
-                    //   inputBorder: const OutlineInputBorder(
-                    //     borderSide: BorderSide(color: Color(0xFF11CEC4)),
-                    //   ),
-                    //   inputDecoration: const InputDecoration(
-                    //     enabledBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                    //     focusedBorder: OutlineInputBorder(
-                    //         borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                    //     hintText: 'Enter your WhatsApp number',
-                    //   ),
-                    //   onSaved: (PhoneNumber number) {
-                    //     print('On Saved: $number');
-                    //   },
-                    // ),
                     const SizedBox(height: 16),
                     const Text(
                       'Email Address',
@@ -290,6 +280,40 @@ class _FormPageState extends State<FormPage> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: selectFile,
+                      child: const Text(
+                        'Select File',
+                      ),
+                    ),
+                    if (pickedFile != null)
+                      Container(
+                        child:
+                            // pickedFile!.extension == 'jpg' ||
+                            //         pickedFile!.extension == 'jpeg' ||
+                            //         pickedFile!.extension == 'png'
+                            //     ? Container(
+                            //         child: Image.file(
+                            //           File(pickedFile!.path!),
+                            //           width: 100,
+                            //           height: 100,
+                            //           fit: BoxFit.cover,
+                            //         ),
+                            //       )
+                            //     :
+                            ListTile(
+                          title: Text(pickedFile!.name),
+                          subtitle: Text(
+                              '${(pickedFile!.size / 1024).toStringAsFixed(2)} KB'),
+                        ),
+                      ),
+                    ElevatedButton(
+                      onPressed: uploadFile,
+                      child: const Text(
+                        'Upload File',
+                      ),
+                    ),
+                    buildProgress(),
                     const Text(
                       'Message',
                       style: TextStyle(
@@ -358,4 +382,37 @@ class _FormPageState extends State<FormPage> {
       ),
     );
   }
+
+  Widget buildProgress() => StreamBuilder<TaskSnapshot>(
+        stream: uploadTask?.snapshotEvents,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final snap = snapshot.data!;
+            final progress = snap.bytesTransferred / snap.totalBytes;
+            final percentage = (progress * 100).toStringAsFixed(2);
+
+            return SizedBox(
+              height: 50,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  LinearProgressIndicator(
+                    value: progress,
+                    backgroundColor: Colors.grey,
+                    color: Colors.green,
+                  ),
+                  Center(
+                    child: Text(
+                      '$percentage %',
+                      style: const TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Container();
+          }
+        },
+      );
 }
