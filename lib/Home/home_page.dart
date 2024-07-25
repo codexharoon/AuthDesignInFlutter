@@ -77,10 +77,12 @@ class HomePageState extends State<HomePage> {
         key: _sliderDrawerKey,
         sliderOpenSize: 179,
         slider: _SliderView(
+          selectedMenuItem: selectedMenuItem,
           onItemClick: (title) {
             _sliderDrawerKey.currentState!.closeSlider();
             setState(() {
               this.title = title;
+              selectedMenuItem = title;
             });
 
             switch (title) {
@@ -123,10 +125,12 @@ class HomePageState extends State<HomePage> {
 
 class _SliderView extends StatelessWidget {
   final Function(String)? onItemClick;
+  final String selectedMenuItem;
 
   final user = FirebaseAuth.instance.currentUser!;
 
-  _SliderView({Key? key, this.onItemClick}) : super(key: key);
+  _SliderView({Key? key, this.onItemClick, required this.selectedMenuItem})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -182,6 +186,7 @@ class _SliderView extends StatelessWidget {
                   title: menu.title,
                   iconData: menu.iconData,
                   onTap: onItemClick,
+                  selected: selectedMenuItem == menu.title,
                 ),
               )
               .toList(),
@@ -195,22 +200,27 @@ class _SliderMenuItem extends StatelessWidget {
   final String title;
   final IconData iconData;
   final Function(String)? onTap;
+  final bool selected;
 
-  const _SliderMenuItem(
-      {Key? key,
-      required this.title,
-      required this.iconData,
-      required this.onTap})
-      : super(key: key);
+  const _SliderMenuItem({
+    Key? key,
+    required this.title,
+    required this.iconData,
+    required this.onTap,
+    this.selected = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        title: Text(title,
-            style: const TextStyle(
-                color: Colors.black, fontFamily: 'BalsamiqSans_Regular')),
-        leading: Icon(iconData, color: Colors.black),
-        onTap: () => onTap?.call(title));
+    return Container(
+      color: selected ? Colors.grey[300] : Colors.transparent,
+      child: ListTile(
+          title: Text(title,
+              style: const TextStyle(
+                  color: Colors.black, fontFamily: 'BalsamiqSans_Regular')),
+          leading: Icon(iconData, color: Colors.black),
+          onTap: () => onTap?.call(title)),
+    );
   }
 }
 
