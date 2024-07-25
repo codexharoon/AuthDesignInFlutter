@@ -98,8 +98,9 @@ class _FormPageState extends State<FormPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const PayNowPage(
+            builder: (context) => PayNowPage(
               totalPrice: 100,
+              services: widget.selectedCategorySubOptionName,
             ),
           ),
         );

@@ -1,17 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'color_extension.dart';
-import 'invoice_page.dart';
-// import 'round_button.dart';
-import 'dart:math';
+// import 'invoice_page.dart';
 
 class PayNowPage extends StatefulWidget {
   final double totalPrice;
+  final String services;
 
-  const PayNowPage({Key? key, required this.totalPrice}) : super(key: key);
+  const PayNowPage({Key? key, required this.totalPrice, required this.services})
+      : super(key: key);
 
   @override
   State<PayNowPage> createState() => _PayNowPageState();
@@ -20,8 +16,6 @@ class PayNowPage extends StatefulWidget {
 class _PayNowPageState extends State<PayNowPage> {
   List paymentArr = [
     {"name": "Cash on delivery", "icon": "assets/images/cash.png"},
-    // {"name": "**** **** **** 2187", "icon": "assets/images/visa_icon.png"},
-    // {"name": "test@gmail.com", "icon": "assets/images/paypal.png"},
   ];
 
   int selectMethod = -1;
@@ -33,61 +27,14 @@ class _PayNowPageState extends State<PayNowPage> {
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
-    // _navigateToChangeAddressView();
-  }
-
-  Future<void> _fetchUserData() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? uid = prefs.getString('uid');
-
-      if (uid != null) {
-        var userDoc = await FirebaseFirestore.instance
-            .collection('UserData')
-            .doc(uid)
-            .get();
-
-        if (userDoc.exists) {
-          setState(() {
-            deliveryAddress = userDoc.get('address') ?? "No address available";
-            deliveryEmail = userDoc.get("email") ?? "No email available";
-            deliveryName = userDoc.get("fullName") ?? "No name available";
-            deliveryPhone = userDoc.get("contact") ?? "No contact available";
-          });
-        } else {
-          setState(() {
-            deliveryAddress = "No address available";
-            deliveryEmail = "No email available";
-            deliveryName = "No name available";
-            deliveryPhone = "No contact available";
-          });
-        }
-      } else {
-        setState(() {
-          deliveryAddress = "User ID not found";
-          deliveryEmail = "User ID not found";
-          deliveryName = "User ID not found";
-          deliveryPhone = "User ID not found";
-        });
-      }
-    } catch (e) {
-      print("Error fetching user data: $e");
-      setState(() {
-        deliveryAddress = "Error loading address";
-        deliveryEmail = "Error loading email";
-        deliveryName = "Error loading name";
-        deliveryPhone = "Error loading contact";
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    double deliveryCost = 2; // Example delivery cost
+    double fee = 2; // Example delivery cost
     double discount = 4; // Example discount
     double subTotal = widget.totalPrice;
-    double total = subTotal + deliveryCost - discount;
+    double total = subTotal + fee - discount;
 
     return Scaffold(
       backgroundColor: TColor.white,
@@ -143,16 +90,7 @@ class _PayNowPageState extends State<PayNowPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "Service Name",
-                          style: TextStyle(
-                            color: TColor.primaryText,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          "Service Name",
+                          'xyz service',
                           style: TextStyle(
                             color: TColor.primaryText,
                             fontSize: 15,
@@ -382,22 +320,22 @@ class _PayNowPageState extends State<PayNowPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => InvoicePage(
-                                deliveryName: 'haroon',
-                                deliveryEmail: 'example@mail.com',
-                                deliveryAddress: 'xyz add',
-                                deliveryCost: deliveryCost.toString(),
-                                deliveryPhone: deliveryPhone),
-                          ),
-                        );
-                      },
-                      child: const Text("Generate Receipt"),
-                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => InvoicePage(
+                    //             deliveryName: 'haroon',
+                    //             deliveryEmail: 'example@mail.com',
+                    //             deliveryAddress: 'xyz add',
+                    //             deliveryCost: fee.toString(),
+                    //             deliveryPhone: deliveryPhone),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: const Text("Generate Receipt"),
+                    // ),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {},
