@@ -7,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:law_app/Hire%20Services/pay_now_page.dart';
 import 'package:law_app/components/Email/send_email_emailjs.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class FormPage extends StatefulWidget {
   final String selectedCategory;
@@ -41,41 +40,53 @@ class _FormPageState extends State<FormPage> {
 
   bool loading = false;
 
-  PlatformFile? pickedFile;
-  UploadTask? uploadTask;
-  String? fileUrl;
+  List<PlatformFile> pickedFiles = [];
+  List<UploadTask?> uploadTasks = [];
+  List<String> fileUrls = [];
 
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles();
+  final imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+
+  Future selectFiles() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
 
     if (result == null) return;
 
     setState(() {
-      pickedFile = result.files.first;
+      for (var file in result.files) {
+        if (!pickedFiles
+            .any((existingFile) => existingFile.name == file.name)) {
+          pickedFiles.add(file);
+        }
+      }
     });
   }
 
-  Future uploadFile() async {
-    if (pickedFile == null) return;
+  Future uploadFiles() async {
+    if (pickedFiles.isEmpty) return;
 
-    final path = 'files/${pickedFile!.name}';
-    final file = File(pickedFile!.path!);
+    List<String> urls = [];
 
-    final ref = FirebaseStorage.instance.ref().child(path);
+    for (var file in pickedFiles) {
+      final path = 'files/${file.name}';
+      final fileToUpload = File(file.path!);
+      final ref = FirebaseStorage.instance.ref().child(path);
+
+      final uploadTask = ref.putFile(fileToUpload);
+
+      setState(() {
+        uploadTasks.add(uploadTask);
+      });
+
+      final snapshot = await uploadTask.whenComplete(() {});
+      final urlDownload = await snapshot.ref.getDownloadURL();
+
+      print('Download Link: $urlDownload');
+      urls.add(urlDownload);
+    }
 
     setState(() {
-      uploadTask = ref.putFile(file);
-    });
-
-    final snapshot = await uploadTask!.whenComplete(() {});
-
-    final urlDownload = await snapshot.ref.getDownloadURL();
-
-    print('Download Link: $urlDownload');
-
-    setState(() {
-      fileUrl = urlDownload;
-      uploadTask = null;
+      fileUrls = urls;
+      uploadTasks = [];
     });
   }
 
@@ -104,7 +115,7 @@ class _FormPageState extends State<FormPage> {
         'selectedCategorySubOptionName': widget.selectedCategorySubOptionName,
         'userId': currentUser?.uid,
         'status': 'in progress',
-        'fileUrl': fileUrl ?? '',
+        'fileUrl': fileUrls,
         'timestamp':
             FieldValue.serverTimestamp(), // Adds a server-side timestamp
       };
@@ -281,34 +292,40 @@ class _FormPageState extends State<FormPage> {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: selectFile,
+                      onPressed: selectFiles,
                       child: const Text(
                         'Select File',
                       ),
                     ),
-                    if (pickedFile != null)
-                      Container(
-                        child:
-                            // pickedFile!.extension == 'jpg' ||
-                            //         pickedFile!.extension == 'jpeg' ||
-                            //         pickedFile!.extension == 'png'
-                            //     ? Container(
-                            //         child: Image.file(
-                            //           File(pickedFile!.path!),
-                            //           width: 100,
-                            //           height: 100,
-                            //           fit: BoxFit.cover,
-                            //         ),
-                            //       )
-                            //     :
-                            ListTile(
-                          title: Text(pickedFile!.name),
-                          subtitle: Text(
-                              '${(pickedFile!.size / 1024).toStringAsFixed(2)} KB'),
-                        ),
+                    if (pickedFiles.isNotEmpty)
+                      Column(
+                        children: pickedFiles.map((file) {
+                          final fileExtension = file.extension?.toLowerCase();
+                          final isImage =
+                              imageExtensions.contains(fileExtension);
+
+                          return ListTile(
+                            leading: isImage
+                                ? Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: FileImage(File(file.path!)),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                : const Icon(Icons.insert_drive_file,
+                                    size: 50, color: Colors.grey),
+                            title: Text(file.name),
+                            subtitle: Text(
+                                '${(file.size / 1024).toStringAsFixed(2)} KB'),
+                          );
+                        }).toList(),
                       ),
                     ElevatedButton(
-                      onPressed: uploadFile,
+                      onPressed: uploadFiles,
                       child: const Text(
                         'Upload File',
                       ),
@@ -383,36 +400,41 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildProgress() => StreamBuilder<TaskSnapshot>(
-        stream: uploadTask?.snapshotEvents,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final snap = snapshot.data!;
-            final progress = snap.bytesTransferred / snap.totalBytes;
-            final percentage = (progress * 100).toStringAsFixed(2);
+  Widget buildProgress() => Column(
+        children: uploadTasks.map((task) {
+          return StreamBuilder<TaskSnapshot>(
+            stream: task?.snapshotEvents,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final snap = snapshot.data!;
+                final progress = snap.bytesTransferred / snap.totalBytes;
+                final percentage = (progress * 100).toStringAsFixed(2);
 
-            return SizedBox(
-              height: 50,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  LinearProgressIndicator(
-                    value: progress,
-                    backgroundColor: Colors.grey,
-                    color: Colors.green,
+                return SizedBox(
+                  height: 50,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      LinearProgressIndicator(
+                        value: progress,
+                        backgroundColor: Colors.grey,
+                        color: Colors.green,
+                      ),
+                      Center(
+                        child: Text(
+                          '$percentage %',
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
-                  Center(
-                    child: Text(
-                      '$percentage %',
-                      style: const TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            return Container();
-          }
-        },
+                );
+              } else {
+                return Container();
+              }
+            },
+          );
+        }).toList(),
       );
 }

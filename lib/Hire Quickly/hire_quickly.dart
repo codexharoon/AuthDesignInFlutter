@@ -115,8 +115,15 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
                       duration: const Duration(milliseconds: 300),
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                          // color: Colors.white,
-                          color: item['color'],
+                          // color: item['color'],
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Colors.orange[300]!,
+                              Colors.red[400]!,
+                            ],
+                          ),
                           borderRadius: BorderRadius.circular(20),
                           border: _selectedIndex == item
                               ? Border.all(
@@ -137,6 +144,8 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
                                 ]),
                       child: SingleChildScrollView(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               height: 320,
@@ -155,46 +164,74 @@ class _HireQuicklyPageState extends State<HireQuicklyPage> {
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
-                                  ),
-                                  Text(
-                                    item['title'],
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${item['option']}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 40,
                                   ),
                                   Text(
                                     '${item['price']} \$',
                                     style: const TextStyle(
                                       fontSize: 50,
                                       fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 12, right: 12),
+                                    child: Divider(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        item['title'],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Text(
+                                        item['subTitle'],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Text(
+                                        item['option'],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 12, right: 12),
+                                    child: Divider(
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
+                            // const SizedBox(
+                            //   height: 20,
+                            // ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8, right: 8),
                               child: Center(
                                 child: Text(
                                   item['description'],
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey.shade600),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
