@@ -8,14 +8,16 @@ class PayNowPage extends StatefulWidget {
   final String subTitle;
   final String option;
   final double totalPrice;
+  List<String> extraOption;
 
-  const PayNowPage(
+  PayNowPage(
       {Key? key,
       required this.totalPrice,
       required this.heading,
       required this.title,
       required this.subTitle,
-      required this.option})
+      required this.option,
+      this.extraOption = const []})
       : super(key: key);
 
   @override
@@ -135,6 +137,23 @@ class _PayNowPageState extends State<PayNowPage> {
                           ),
                         ),
                         const SizedBox(height: 4),
+                        widget.extraOption.isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: widget.extraOption
+                                    .map(
+                                      (e) => Text(
+                                        e,
+                                        style: TextStyle(
+                                          color: TColor.primaryText,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              )
+                            : const SizedBox.shrink(),
                       ],
                     ),
                   ],

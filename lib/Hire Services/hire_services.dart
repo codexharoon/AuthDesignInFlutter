@@ -486,7 +486,8 @@ class _HireServicesState extends State<HireServices> {
             children: [
               Text(
                 'swipe to see more ',
-                style: TextStyle(color: Colors.grey),
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.w700),
               ),
               Icon(
                 Icons.arrow_forward,
@@ -702,6 +703,8 @@ class MyNestedAccordion extends StatelessWidget //__
                                 selectedCategorySubOption: sbOption.title,
                                 selectedCategorySubOptionName: opt,
                                 price: 50,
+                                selectedCategorySubOptionAllName:
+                                    sbOption.subOptions,
                               ),
                             ),
                           );

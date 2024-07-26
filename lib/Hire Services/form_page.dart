@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:law_app/Hire%20Services/pay_now_page.dart';
 import 'package:law_app/components/Email/send_email_emailjs.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 class FormPage extends StatefulWidget {
   final String selectedCategory;
@@ -14,14 +15,16 @@ class FormPage extends StatefulWidget {
   final String selectedCategorySubOption;
   final String selectedCategorySubOptionName;
   final double price;
+  List<String> selectedCategorySubOptionAllName;
 
-  const FormPage({
+  FormPage({
     Key? key,
     required this.selectedCategory,
     required this.selectedCategoryOption,
     required this.selectedCategorySubOption,
     required this.selectedCategorySubOptionName,
     required this.price,
+    this.selectedCategorySubOptionAllName = const [],
   }) : super(key: key);
 
   @override
@@ -37,6 +40,11 @@ class _FormPageState extends State<FormPage> {
   final _messageController = TextEditingController();
 
   final currentUser = FirebaseAuth.instance.currentUser;
+
+  List<String> allOptions = []; // List of all options
+  List<String> selectedOptions = []; // List of selected options
+  String? selectedOption; // Currently selected option
+  double totalPrice = 0.0;
 
   bool loading = false;
 
@@ -94,6 +102,20 @@ class _FormPageState extends State<FormPage> {
   void initState() {
     _whatsappController.text = currentUser?.phoneNumber ?? '';
     _emailController.text = currentUser?.email ?? '';
+    totalPrice = widget.price;
+
+    // Initialize options
+    // allOptions = widget.selectedCategorySubOptionAllName;
+    // disabledOptions = [];
+    // selectedOption = null; // Initially no option is selected
+
+    allOptions = widget.selectedCategorySubOptionAllName
+        .where((option) => option != widget.selectedCategorySubOptionName)
+        .toList();
+    // Initially disable the option matching selectedCategorySubOptionName
+    if (allOptions.contains(widget.selectedCategorySubOptionName)) {
+      selectedOptions.add(widget.selectedCategorySubOptionName);
+    }
     super.initState();
   }
 
@@ -116,6 +138,10 @@ class _FormPageState extends State<FormPage> {
         'userId': currentUser?.uid,
         'status': 'in progress',
         'fileUrl': fileUrls,
+        'extraOption': selectedOptions,
+        'totalPrice': selectedOptions.isNotEmpty
+            ? totalPrice * (selectedOptions.length + 1)
+            : totalPrice,
         'timestamp':
             FieldValue.serverTimestamp(), // Adds a server-side timestamp
       };
@@ -156,7 +182,10 @@ class _FormPageState extends State<FormPage> {
               title: widget.selectedCategoryOption,
               subTitle: widget.selectedCategorySubOption,
               option: widget.selectedCategorySubOptionName,
-              totalPrice: widget.price,
+              totalPrice: selectedOptions.isNotEmpty
+                  ? totalPrice * (selectedOptions.length + 1)
+                  : totalPrice,
+              extraOption: selectedOptions,
             ),
           ),
         );
@@ -177,46 +206,99 @@ class _FormPageState extends State<FormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Form Page'),
+        title: const Text('Order Services'),
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          Text(
-            '${widget.selectedCategory} > ${widget.selectedCategoryOption} > ${widget.selectedCategorySubOption} > ${widget.selectedCategorySubOptionName}',
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 15,
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Text(
+                    widget.selectedCategory,
+                    style: const TextStyle(
+                      color: Colors.deepPurple,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const Text(
+                    ' > ',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    widget.selectedCategoryOption,
+                    style: const TextStyle(
+                      color: Colors.deepPurple,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const Text(
+                    ' > ',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    widget.selectedCategorySubOption,
+                    style: const TextStyle(
+                      color: Colors.deepPurple,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const Text(
+                    ' > ',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    widget.selectedCategorySubOptionName,
+                    style: const TextStyle(
+                      color: Colors.deepPurple,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Form(
             key: _formKey,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Name',
-                      style: TextStyle(
-                        color: Color(
-                          0xFF11CEC4,
-                        ),
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
                     TextFormField(
                       controller: _nameController,
                       decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF11CEC4))),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                        // labelText: 'Name',
+                        labelText: 'Name',
                         labelStyle: TextStyle(color: Color(0xFF11CEC4)),
                         hintText: 'Enter your name',
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Color(0xFF11CEC4),
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -225,27 +307,23 @@ class _FormPageState extends State<FormPage> {
                         return null;
                       },
                     ),
-                    const Text(
-                      'WhatsApp Number',
-                      style: TextStyle(
-                        color: Color(
-                          0xFF11CEC4,
-                        ),
-                        fontSize: 20,
-                      ),
-                    ),
+
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _whatsappController,
                       keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF11CEC4))),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                        // labelText: 'Phone',
+                        labelText: 'Phone',
                         labelStyle: TextStyle(color: Color(0xFF11CEC4)),
                         hintText: 'Enter your WhatsApp number',
+                        prefixIcon: Icon(
+                          Icons.phone,
+                          color: Color(0xFF11CEC4),
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -258,27 +336,22 @@ class _FormPageState extends State<FormPage> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Email Address',
-                      style: TextStyle(
-                        color: Color(
-                          0xFF11CEC4,
-                        ),
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF11CEC4))),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF11CEC4))),
-                        // labelText: 'Email',
+                        labelText: 'Email',
                         labelStyle: TextStyle(color: Color(0xFF11CEC4)),
                         hintText: 'Enter your email address',
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Color(0xFF11CEC4),
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -291,10 +364,93 @@ class _FormPageState extends State<FormPage> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: selectFiles,
-                      child: const Text(
-                        'Select File',
+                    // const SizedBox(height: 16),
+                    // Display selected options with remove button
+                    if (selectedOptions.isNotEmpty)
+                      Wrap(
+                        spacing: 8.0,
+                        children: selectedOptions.map((option) {
+                          return Chip(
+                            label: Text(option),
+                            onDeleted: () {
+                              setState(() {
+                                selectedOptions.remove(option);
+                                if (option !=
+                                    widget.selectedCategorySubOptionName) {
+                                  allOptions.add(option);
+                                }
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Add another Service',
+                      style: TextStyle(
+                        color: Color(0xFF11CEC4),
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButton<String>(
+                      value: selectedOption,
+                      isExpanded: true,
+                      hint: const Text('Select another Service'),
+                      items: allOptions.map((option) {
+                        final isSelectedSubOption =
+                            option == widget.selectedCategorySubOptionName;
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(
+                            option,
+                            style: TextStyle(
+                              color: isSelectedSubOption ||
+                                      selectedOptions.contains(option)
+                                  ? Colors.grey
+                                  : Colors.black,
+                            ),
+                          ),
+                          enabled: !(isSelectedSubOption ||
+                              selectedOptions.contains(option)),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null && !selectedOptions.contains(value)) {
+                          setState(() {
+                            selectedOptions.add(value);
+                            allOptions.remove(value);
+                            selectedOption = null;
+                          });
+                        }
+                      },
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                    const SizedBox(height: 16),
+                    // ElevatedButton(
+                    //   onPressed: selectFiles,
+                    //   child: Text(
+                    //     pickedFiles.isNotEmpty
+                    //         ? 'Select Another File'
+                    //         : 'Select Files',
+                    //   ),
+                    // ),
+                    GestureDetector(
+                      onTap: selectFiles,
+                      child: DottedBorder(
+                        color: const Color(0xFF11CEC4),
+                        radius: const Radius.circular(8),
+                        strokeWidth: 2,
+                        child: const SizedBox(
+                          height: 50,
+                          child: Center(
+                            child: Icon(
+                              Icons.upload_file,
+                              color: Color(0xFF11CEC4),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     if (pickedFiles.isNotEmpty)
@@ -321,29 +477,43 @@ class _FormPageState extends State<FormPage> {
                             title: Text(file.name),
                             subtitle: Text(
                                 '${(file.size / 1024).toStringAsFixed(2)} KB'),
+                            trailing: IconButton(
+                              color: Colors.black,
+                              icon: const Icon(
+                                Icons.close_rounded,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  pickedFiles.remove(file);
+                                });
+                              },
+                            ),
                           );
                         }).toList(),
                       ),
-                    ElevatedButton(
-                      onPressed: uploadFiles,
-                      child: const Text(
-                        'Upload File',
-                      ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF11CEC4),
+                          ),
+                          onPressed: uploadFiles,
+                          child: const Text(
+                            'Attach Files',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                     buildProgress(),
-                    const Text(
-                      'Message',
-                      style: TextStyle(
-                        color: Color(
-                          0xFF11CEC4,
-                        ),
-                        fontSize: 20,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
+
                     TextFormField(
                       controller: _messageController,
-                      maxLines: 4,
+                      maxLines: 2,
                       decoration: const InputDecoration(
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF11CEC4))),
@@ -352,6 +522,9 @@ class _FormPageState extends State<FormPage> {
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF11CEC4))),
                         hintText: 'Enter your message',
+                        labelText: 'Message',
+                        labelStyle: TextStyle(color: Color(0xFF11CEC4)),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
                         prefixIcon: Icon(
                           Icons.message,
                           color: Color(0xFF11CEC4),
@@ -385,7 +558,7 @@ class _FormPageState extends State<FormPage> {
                                     horizontal: 110, vertical: 15),
                               ),
                               child: const Text(
-                                'Submit',
+                                'Generate Order',
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
